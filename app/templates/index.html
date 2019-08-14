@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis on Intel® Optane™ DC Persistent Memory</title>
+    <link rel="shortcut icon" href="#">
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/cb/style-metro.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/cb/style.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/cb/style-responsive.css" rel="stylesheet" type="text/css" />
+    <link href="../static/css/cb/default.css" rel="stylesheet" type="text/css" id="style_color" />
+
+    <link rel="stylesheet" type="text/css" href="../static/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/default.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/styles.css">
+    <link rel="icon" href="../static/img/Intel.png" type="image/x-icon">
+</head>
+
+<body class="page-header-fixed page-sidebar-closed">
+    <header id="Header">
+        <div class="header navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="#">
+                        <img src="../static/img/Intel.png" alt="logo" class="intel_icon" />
+                    </a>
+                    <span class="navbar-text">Redis on Intel® Optane™ DC Persistent Memory</span>
+                    <ul class="nav pull-right dropdown">
+                        <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="glyphicon glyphicon-info-sign"></span> about</a>
+                            <ul class="dropdown-menu">
+                                <div id="server_info">
+                                    <div class="img">
+                                        <img src="../static/img/aep_socket.png" id="img1">
+                                    </div>
+                                    <div id="tab">
+                                        <table border="1">
+                                            <tr>
+                                                <td class="td_title">CPU(s)</td>
+                                                <td class="td_info">96</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">Socket(s)</td>
+                                                <td class="td_info">2</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">Thread(s) peer core</td>
+                                                <td class="td_info">2</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">Core(s) per socket</td>
+                                                <td class="td_info">24</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">NUMA node0 CPU(s)</td>
+                                                <td class="td_info">0-23,48-71</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">NUMA node1 CPU(s)</td>
+                                                <td class="td_info">24-47, 72-95</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">DRAM</td>
+                                                <td class="td_info">16GB*12</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="td_title">DCPMM</td>
+                                                <td class="td_info">128GB*8</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container row-fluid">
+            <div class="page-sidebar nav-collapse collapse">
+                <ul class="page-sidebar-menu">
+                    <li>
+                        <div class="sidebar-toggler hidden-phone"></div>
+                    </li>
+                    <li class="">
+                        <a id="cog" href="javascript:;">
+                            <i class="icon-cogs"></i>
+                            <span class="title">Configuration</span>
+                        </a>
+                    </li>
+                    <li class="start ">
+                        <a href="https://www.intel.com/content/www/us/en/homepage.html">
+                            <i class="icon-home"></i>
+                            <span class="title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a id="run-test" href="javascript:;">
+                            <i class="icon-play"></i>
+                            <span class="title">Run-test</span>
+                        </a>                       
+                    </li>
+                    <li class="">
+                        <a id="stop-server" href="javascript:;">
+                            <i class="icon-pause"></i>
+                            <span class="title">Stop-server</span>                         
+                        </a>
+                    </li>
+                    <li class="">
+                        <a id="show-log" href="javascript:;">
+                            <i class="glyphicon glyphicon-export"></i>
+                            <span class="title">Show-Log</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div id="server_info">
+                            <div class="img">
+                                <img src="../static/img/aep_socket.png" id="img1">
+                            </div>
+                            <div id="tab">
+                                <table border="1">
+                                    <tr>
+                                        <td class="td_title">CPU(s)</td>
+                                        <td class="td_info">96</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Socket(s)</td>
+                                        <td class="td_info">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Thread(s) peer core</td>
+                                        <td class="td_info">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Core(s) per socket</td>
+                                        <td class="td_info">24</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">NUMA node0 CPU(s)</td>
+                                        <td class="td_info">0-23,48-71</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">NUMA node1 CPU(s)</td>
+                                        <td class="td_info">24-47, 72-95</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">DRAM</td>
+                                        <td class="td_info">16GB*12</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">DCPMM</td>
+                                        <td class="td_info">128GB*8</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="server_info_1lm">
+                            <div class="img">
+                                <img src="../static/img/ddr_socket.png" id="img1">
+                            </div>
+                            <div id="tab">
+                                <table border="1">
+                                    <tr>
+                                        <td class="td_title">CPU(s)</td>
+                                        <td class="td_info">96</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Socket(s)</td>
+                                        <td class="td_info">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Thread(s) peer core</td>
+                                        <td class="td_info">2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Core(s) per socket</td>
+                                        <td class="td_info">24</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">NUMA node0 CPU(s)</td>
+                                        <td class="td_info">0-23,48-71</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">NUMA node1 CPU(s)</td>
+                                        <td class="td_info">24-74, 72-95</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">DRAM</td>
+                                        <td class="td_info">16GB * 12</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Nvme SSD</td>
+                                        <td class="td_info">p3608</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td_title">Redis</td>
+                                        <td class="td_info"> open source(v4.0)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="Preview">
+                            <div id="ad_numa">
+                                <div class="GaugeMeter" id="PreviewGaugeMeter_0" data-bind="gaugeValue: Percent"
+                                    data-prepend=null data-append="%" data-size="256" data-theme="White"
+                                    data-back="#373B40" data-color="#66AA00" data-animate_gauge_colors="1"
+                                    data-animate_text_colors="1" data-width="6" data-prelabel="Socket0_DRAM"
+                                    data-prelabel_color="#BBBBBB" data-label_color="#BBBBBB"
+                                    data-postlabel_color="#BBBBBB" data-animationstep="0"></div>
+                                <div class="GaugeMeter" id="PreviewGaugeMeter_1" data-bind="gaugeValue: Percent"
+                                    data-text=null data-prepend=null data-append="%" data-size="256" data-width="20"
+                                    data-style=null data-color="#FE3912" data-back="#373B40" data-theme=null
+                                    data-animate_gauge_colors=null data-animate_text_colors=null
+                                    data-prelabel="Socket0_DCPMM" data-prelabel_color="#BBBBBB"
+                                    data-label_color="#BBBBBB" data-postlabel_color="#BBBBBB" data-stripe=null
+                                    data-animationstep="0">
+                                </div>
+                                <!--  <div class="GaugeMeter" id="PreviewGaugeMeter_2" data-bind="gaugeValue: Percent" data-prepend=null
+                                            data-append="%" data-size="256" data-theme="White" data-back="#373B40" data-color="#66AA00"
+                                            data-animate_gauge_colors="1" data-animate_text_colors="1" data-width="6"
+                                            data-prelabel="Socket1_DRAM" data-prelabel_color="#BBBBBB" data-label_color="#BBBBBB" data-postlabel_color="#BBBBBB"
+                                            data-animationstep="0"></div>
+                                        <div class="GaugeMeter" id="PreviewGaugeMeter_3" data-bind="gaugeValue: Percent" data-text=null
+                                            data-prepend=null data-append="%" data-size="256" data-width="20" data-style=null
+                                            data-color="#FE3912" data-back="#373B40" data-theme=null data-animate_gauge_colors=null
+                                            data-animate_text_colors=null data-prelabel="Socket1_DCPMM" data-prelabel_color="#BBBBBB" data-label_color="#BBBBBB"
+                                            data-postlabel_color="#BBBBBB" data-stripe=null data-animationstep="0"></div>-->
+                            </div>
+                            <div id="lm_2">
+                                <div class="GaugeMeter" id="PreviewGaugeMeter_2lm_0" data-bind="gaugeValue: Percent"
+                                    data-text=null data-prepend=null data-append="%" data-size="256" data-width="20"
+                                    data-style=null data-color="#FE3912" data-back="#373B40" data-theme=null
+                                    data-animate_gauge_colors=null data-animate_text_colors=null
+                                    data-prelabel="Socket0_DCPMM" data-prelabel_color="#BBBBBB"
+                                    data-label_color="#BBBBBB" data-postlabel_color="#BBBBBB" data-stripe=null
+                                    data-animationstep="0">
+                                </div>
+                                <!--   <div class="GaugeMeter" id="PreviewGaugeMeter_2lm_1" data-bind="gaugeValue: Percent" data-text=null
+                                            data-prepend=null data-append="%" data-size="256" data-width="20" data-style=null
+                                            data-color="#FE3912" data-back="#373B40" data-theme=null data-animate_gauge_colors=null
+                                            data-animate_text_colors=null data-prelabel="Socket1_DCPMM" data-prelabel_color="#BBBBBB"
+                                            data-label_color="#BBBBBB" data-postlabel_color="#BBBBBB" data-stripe=null data-animationstep="0">
+                                        </div> -->
+                            </div>
+
+                            <div id="lm_1">
+                                <div class="GaugeMeter" id="PreviewGaugeMeter_1lm_0" data-bind="gaugeValue: Percent"
+                                    data-prepend=null data-append="%" data-size="256" data-theme="White"
+                                    data-back="#373B40" data-color="#66AA00" data-animate_gauge_colors="1"
+                                    data-animate_text_colors="1" data-width="6" data-prelabel="Socket0_DRAM"
+                                    data-prelabel_color="#BBBBBB" data-label_color="#BBBBBB"
+                                    data-postlabel_color="#BBBBBB" data-animationstep="0"></div>
+                                <!--  <div class="GaugeMeter" id="PreviewGaugeMeter_1lm_1" data-bind="gaugeValue: Percent" data-prepend=null
+                                            data-append="%" data-size="256" data-theme="White" data-back="#373B40" data-color="#66AA00"
+                                            data-animate_gauge_colors="1" data-animate_text_colors="1" data-width="6"
+                                            data-prelabel="Socket1_DRAM" data-prelabel_color="#BBBBBB" data-label_color="#BBBBBB" data-postlabel_color="#BBBBBB"
+                                            data-animationstep="0"></div> -->
+                            </div>
+                        </div>
+
+                        <div id="charts">
+                            <div id="chart_qps">
+                            </div>
+                            <div class="tab_instance">
+                                <div id="container"></div>
+                                <div id="instance_qps" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                            </div>
+                        </div>
+                        <div id="log_result">                                                  
+                            <div id="result_qps_mem" style="min-width:400px;height:400px"></div>
+                            <div id="result_latency" style="min-width:400px;height:400px">
+                            </div> 
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
+
+    <script src="../static/js/jquery-2.1.1.min.js"></script>
+    <script>
+        $.ajax({
+            url: "/mode_info",
+            success: function (data) {
+                if (data == "1LM") {
+                    var temp = document.getElementById("server_info_1lm");
+                    temp.style.visibility = "visible";
+                    temp.style.display = "block";
+                    // temp.firstElementChild.firstElementChild.height = temp.lastElementChild.offsetHeight;
+                    document.getElementById("lm_1").style.visibility = "visible";
+                    document.getElementById("lm_1").style.display = "block";
+                } else {
+                    var temp = document.getElementById("server_info");
+                    temp.style.visibility = "visible";
+                    temp.style.display = "block";
+                    // temp.firstElementChild.firstElementChild.height = temp.lastElementChild.offsetHeight;                   
+                    if (data == "AD_Mode" || data == "Numa_Node") {
+                        document.getElementById("ad_numa").style.visibility = "visible";
+                        document.getElementById("ad_numa").style.display = "block";
+                    } else if (data == "2LM") {
+                        document.getElementById("lm_2").style.visibility = "visible";
+                        document.getElementById("lm_2").style.display = "block";
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script src="../static/js/app.js"></script>
+
+    <script src="../static/js/GaugeMeter.js"></script>
+    <script src="../static/js/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="../static/js/instance_info.js"></script>
+    <script>
+        jQuery(document).ready(function () {
+            // initiate layout and plugins
+            App.init();
+        });
+    </script>
+</body>
+
+</html>
